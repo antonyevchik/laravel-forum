@@ -1,15 +1,40 @@
 <template>
-    <button type="submit" class="btn btn-outline-primary">
-<!--       <span class="fas  fa-heart"></span>-->
+    <button type="submit" :class="classes" @click="toggle">
         <i class="fas fa-heart"></i>
-        <span v-text="favoritesCount"></span>
+        <span v-text="count"></span>
     </button>
 </template>
 <script>
     export default {
+        props: ['reply'],
+
         data() {
             return {
-                favoritesCount: 10
+                count: this.reply.favoritesCount,
+                active: this.reply.isFavorited
+            }
+        },
+        computed: {
+            classes() {
+                return ['btn', this.active ? 'btn-primary' : 'btn-outline-primary'];
+            },
+            endpoint() {
+                return '/replies/'+this.reply.id+'/favorites';
+            }
+        },
+        methods: {
+            toggle() {
+                this.active ? this.destroy() : this.create();
+            },
+            create() {
+                axios.post(this.endpoint);
+                this.active = true;
+                this.count++;
+            },
+            destroy() {
+                axios.delete(this.endpoint);
+                this.active = false;
+                this.count--;
             }
         }
 

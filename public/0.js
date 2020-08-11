@@ -15,12 +15,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['reply'],
   data: function data() {
     return {
-      favoritesCount: 10
+      count: this.reply.favoritesCount,
+      active: this.reply.isFavorited
     };
+  },
+  computed: {
+    classes: function classes() {
+      return ['btn', this.active ? 'btn-primary' : 'btn-outline-primary'];
+    },
+    endpoint: function endpoint() {
+      return '/replies/' + this.reply.id + '/favorites';
+    }
+  },
+  methods: {
+    toggle: function toggle() {
+      this.active ? this.destroy() : this.create();
+    },
+    create: function create() {
+      axios.post(this.endpoint);
+      this.active = true;
+      this.count++;
+    },
+    destroy: function destroy() {
+      axios["delete"](this.endpoint);
+      this.active = false;
+      this.count--;
+    }
   }
 });
 
@@ -84,11 +108,15 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "button",
-    { staticClass: "btn btn-outline-primary", attrs: { type: "submit" } },
+    {
+      class: _vm.classes,
+      attrs: { type: "submit" },
+      on: { click: _vm.toggle }
+    },
     [
       _c("i", { staticClass: "fas fa-heart" }),
       _vm._v(" "),
-      _c("span", { domProps: { textContent: _vm._s(_vm.favoritesCount) } })
+      _c("span", { domProps: { textContent: _vm._s(_vm.count) } })
     ]
   )
 }
