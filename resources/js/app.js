@@ -8,6 +8,7 @@ require('./bootstrap');
 
  window.Vue = require('vue');
 
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -21,7 +22,8 @@ require('./bootstrap');
 
 
 Vue.component('flash', () => import('./components/Flash.vue'));
-Vue.component('reply', () => import('./components/Reply.vue'));
+Vue.component('thread-view', () => import('./pages/Thread.vue'));
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
