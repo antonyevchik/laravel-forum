@@ -22,6 +22,8 @@ require('./bootstrap');
 
 
 Vue.component('flash', () => import('./components/Flash.vue'));
+Vue.component('paginator', () => import('./components/Paginator.vue'));
+
 Vue.component('thread-view', () => import('./pages/Thread.vue'));
 
 
