@@ -49667,10 +49667,13 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('flash', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(4)]).then(__webpack_require__.bind(null, /*! ./components/Flash.vue */ "./resources/js/components/Flash.vue"));
+  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./components/Flash.vue */ "./resources/js/components/Flash.vue"));
 });
 Vue.component('paginator', function () {
   return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./components/Paginator.vue */ "./resources/js/components/Paginator.vue"));
+});
+Vue.component('user-notifications', function () {
+  return __webpack_require__.e(/*! import() */ 4).then(__webpack_require__.bind(null, /*! ./components/UserNotifications.vue */ "./resources/js/components/UserNotifications.vue"));
 });
 Vue.component('thread-view', function () {
   return Promise.all(/*! import() */[__webpack_require__.e(0), __webpack_require__.e(1)]).then(__webpack_require__.bind(null, /*! ./pages/Thread.vue */ "./resources/js/pages/Thread.vue"));
