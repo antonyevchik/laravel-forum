@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Inspections\Spam;
 use App\Thread;
 use App\Reply;
 use Illuminate\Http\Request;
@@ -24,32 +23,44 @@ class RepliesController extends Controller
      *
      * @param  $channelId
      * @param \App\Thread $thread
-     * @param Spam $spam
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store($channelId, Thread $thread, Spam $spam)
+    public function store($channelId, Thread $thread)
     {
-        $this->validate(request(),['body'=>'required']);
+        try {
+            $this->validate(request(),['body'=>'required|spamfree']);
 
-        $spam->detect(request('body'));
-
-        $reply = $thread->addReply([
-            'body'=>request('body'),
-            'user_id'=>auth()->id()
-        ]);
-        if(request()->expectsJson()) {
-            return $reply->load('owner');
+            $reply = $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id()
+            ]);
+        } catch (\Exception $e) {
+            return response(
+                'Sorry, you reply could not be saved at this time.', 422
+            );
         }
 
-        return back()->with('flash', 'Your reply has been left.');
+        return $reply->load('owner');
     }
+
+
 
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-        $reply->update(request(['body']));
+        try {
+            $this->validate(request(),['body'=>'required|spamfree']);
+
+            $reply->update(request(['body']));
+        } catch (\Exception $e) {
+            return response(
+                'Sorry, you reply could not be saved at this time.', 422
+            );
+        }
+
+
     }
 
     public function destroy(Reply $reply)
@@ -62,5 +73,4 @@ class RepliesController extends Controller
         }
         return back();
     }
-
 }
