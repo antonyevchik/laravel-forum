@@ -42,15 +42,17 @@ class ParticipateInThreadsTest extends TestCase
     {
         $this->withExceptionHandling()->signIn();
         $thread = create('App\Thread');
-        $reply = make('App\Reply',['body'=>null]);
-        $this->post($thread->path().'/replies', $reply->toArray())
+        $reply = make('App\Reply', ['body' => null]);
+        $this->post($thread->path() . '/replies', $reply->toArray())
+//            ->assertStatus(422);
             ->assertSessionHasErrors('body');
+
     }
 
     /**
      * @test
      */
-    public function unauthorized_users_cannot_delete_replies()
+    function unauthorized_users_cannot_delete_replies()
     {
         $this->withExceptionHandling();
         $reply = create('App\Reply');
@@ -110,14 +112,35 @@ class ParticipateInThreadsTest extends TestCase
      */
     function replies_that_contain_spam_may_not_be_created()
     {
+        $this->withExceptionHandling();
+
         $this->signIn();
 
         $thread = create('App\Thread');
         $reply = make('App\Reply', [
             'body' => 'Yahoo Customer Support'
         ]);
-        $this->expectException(\Exception::class);
 
-        $this->post($thread->path() . '/replies', $reply->toArray());
+        $this->json('post', $thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(422);
+    }
+
+    /**
+     * @test
+     */
+    function users_may_only_reply_a_maximum_of_once_per_minute()
+    {
+        $this->withExceptionHandling();
+        $this->signIn();
+
+        $thread = create('App\Thread');
+        $reply = make('App\Reply', [
+            'body' => 'My simple reply.'
+        ]);
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(201);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertStatus(429);
     }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Thread;
 use App\Reply;
-use Illuminate\Http\Request;
+
 
 class RepliesController extends Controller
 {
@@ -18,33 +19,22 @@ class RepliesController extends Controller
         return $thread->replies()->paginate(20);
     }
 
+
     /**
      * Persist a new reply.
      *
-     * @param  $channelId
-     * @param \App\Thread $thread
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @param integer $channelId
+     * @param Thread $thread
+     * @param CreatePostRequest $form
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Http\RedirectResponse
      */
-    public function store($channelId, Thread $thread)
+    public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
-        try {
-            $this->validate(request(),['body'=>'required|spamfree']);
-
-            $reply = $thread->addReply([
-                'body' => request('body'),
-                'user_id' => auth()->id()
-            ]);
-        } catch (\Exception $e) {
-            return response(
-                'Sorry, you reply could not be saved at this time.', 422
-            );
-        }
-
-        return $reply->load('owner');
+       return $thread->addReply([
+            'body' => request('body'),
+            'user_id' => auth()->id()
+        ])->load('owner');
     }
-
-
 
     public function update(Reply $reply)
     {
@@ -73,4 +63,5 @@ class RepliesController extends Controller
         }
         return back();
     }
+
 }

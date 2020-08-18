@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 //use PHPUnit\Framework\TestCase;
+use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -14,8 +15,21 @@ class ReplyTest extends TestCase
      */
     function it_has_an_owner()
     {
-        $reply = factory('App\Reply')->create();
+        $reply = create('App\Reply');
 
         $this->assertInstanceOf('App\User',$reply->owner);
+    }
+
+    /**
+     * @test
+     */
+    function it_knows_if_it_was_just_published()
+    {
+        $reply = create('App\Reply');
+        $this->assertTrue($reply->wasJustPublished());
+        $reply->created_at = Carbon::now()->subMonth();
+        $this->assertFalse($reply->wasJustPublished());
+
+
     }
 }
