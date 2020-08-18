@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
+use App\Notifications\YouWhereMentioned;
 use App\Thread;
 use App\Reply;
+use App\User;
 
 
 class RepliesController extends Controller
@@ -40,17 +42,9 @@ class RepliesController extends Controller
     {
         $this->authorize('update', $reply);
 
-        try {
             $this->validate(request(),['body'=>'required|spamfree']);
 
             $reply->update(request(['body']));
-        } catch (\Exception $e) {
-            return response(
-                'Sorry, you reply could not be saved at this time.', 422
-            );
-        }
-
-
     }
 
     public function destroy(Reply $reply)
