@@ -36,6 +36,8 @@
         .mr-1 { margin-right: 1em;}
         [v-cloak] {display: none;}
     </style>
+
+    @yield('header')
 </head>
 <body>
     <div id="app">
@@ -45,6 +47,6 @@
         <flash message="{{session('flash')}}"></flash>
     </div>
 {{--<script src="{{ asset('js/app.js') }}"></script>--}}
-
+@yield('scripts')
 </body>
 </html>
