@@ -49667,7 +49667,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('flash', function () {
-  return Promise.all(/*! import() */[__webpack_require__.e(2), __webpack_require__.e(5)]).then(__webpack_require__.bind(null, /*! ./components/Flash.vue */ "./resources/js/components/Flash.vue"));
+  return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./components/Flash.vue */ "./resources/js/components/Flash.vue"));
 });
 Vue.component('paginator', function () {
   return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./components/Paginator.vue */ "./resources/js/components/Paginator.vue"));
