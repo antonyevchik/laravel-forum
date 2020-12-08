@@ -12,7 +12,7 @@
                     <div class="card mb-4" >
                         <div class="card-header">
                             <div class="level">
-                                <img src="{{asset($thread->creator->avatar())}}" alt="{{ $thread->creator->name }}" width="3%" height="3%" class="mr-1">
+                                <img src="{{asset($thread->creator->avatar_path)}}" alt="{{ $thread->creator->name }}" width="3%" height="3%" class="mr-1">
                                 <span class="flex">
                                     <a href="{{route('profile', $thread->creator)}}"> {{$thread->creator->name}}</a> posted:
                                     {{$thread->title}}
