@@ -8,6 +8,7 @@ use App\Thread;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use function GuzzleHttp\json_decode;
 use function GuzzleHttp\json_encode;
 
 class ThreadsController extends Controller
@@ -33,7 +34,9 @@ class ThreadsController extends Controller
             return $threads;
         }
 
-        return view('threads.index', compact('threads'));
+        $trending = array_map('json_decode',Redis::zrevrange('trending_threads', 0, 4));
+
+        return view('threads.index', compact('threads', 'trending'));
     }
 
     /**
