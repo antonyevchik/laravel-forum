@@ -59,7 +59,6 @@ class ThreadsController extends Controller
      */
     public function store(Request $request)
     {
-
         $this->validate($request, [
             'title' => 'required|spamfree',
             'body' => 'required|spamfree',
@@ -73,6 +72,7 @@ class ThreadsController extends Controller
             'title'=>request('title'),
             'body'=>request('body')
             ]);
+
         return redirect($thread->path())
             ->with('flash', 'Your thread has been published!');
     }
