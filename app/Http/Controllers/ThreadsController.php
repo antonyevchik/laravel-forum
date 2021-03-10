@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Filters\ThreadFilters;
 use App\Channel;
 use App\Thread;
-use Carbon\Carbon;
+use App\Trending;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redis;
-use function GuzzleHttp\json_decode;
-use function GuzzleHttp\json_encode;
+use Illuminate\Http\Response;
 
 class ThreadsController extends Controller
 {
@@ -23,9 +21,10 @@ class ThreadsController extends Controller
      *
      * @param Channel $channel
      * @param ThreadFilters $filters
-     * @return \Illuminate\Http\Response
+     * @param Trending $trending
+     * @return Response
      */
-    public function index(Channel $channel, ThreadFilters $filters)
+    public function index(Channel $channel, ThreadFilters $filters, Trending $trending)
     {
 
         $threads = $this->getThreads($channel, $filters);
@@ -34,15 +33,17 @@ class ThreadsController extends Controller
             return $threads;
         }
 
-        $trending = array_map('json_decode',Redis::zrevrange('trending_threads', 0, 4));
 
-        return view('threads.index', compact('threads', 'trending'));
+        return view('threads.index', [
+            'threads' => $threads,
+            'trending' => $trending->get(),
+        ]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -53,7 +54,7 @@ class ThreadsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return Response
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
@@ -80,19 +81,17 @@ class ThreadsController extends Controller
      * Display the specified resource.
      *
      * @param  $channelId
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
+     * @param Thread $thread
+     * @param Trending $trending
+     * @return Response
      */
-    public function show($channelId, Thread $thread)
+    public function show($channelId, Thread $thread, Trending $trending)
     {
         if(auth()->check()) {
             auth()->user()->read($thread);
         }
 
-        Redis::zincrby('trending_threads', 1, json_encode([
-            'title' => $thread->title,
-            'path' => $thread->path(),
-        ]));
+        $trending->push($thread);
 
         return view('threads.show', compact('thread'));
     }
@@ -100,8 +99,8 @@ class ThreadsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
+     * @param Thread $thread
+     * @return Response
      */
     public function edit(Thread $thread)
     {
@@ -112,8 +111,8 @@ class ThreadsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Thread  $thread
-     * @return \Illuminate\Http\Response
+     * @param Thread $thread
+     * @return Response
      */
     public function update(Request $request, Thread $thread)
     {
@@ -123,8 +122,8 @@ class ThreadsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @param Thread $thread
+     * @return Response
      * @throws \Exception
      */
     public function destroy($channel, Thread $thread)
