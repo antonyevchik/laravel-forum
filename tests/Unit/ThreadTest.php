@@ -157,10 +157,10 @@ class ThreadTest extends TestCase
         $thread->visits()->record();
 
         $this->assertEquals(1, $thread->visits()->count());
-//
-//        $thread->recordVisit();
-//
-//        $this->assertEquals(2, $thread->visits());
+
+        $thread->visits()->record();
+
+        $this->assertEquals(2, $thread->visits()->count());
     }
 
 }
