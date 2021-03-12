@@ -74,7 +74,6 @@
             destroy() {
                 axios.delete('/replies/'+this.data.id);
                 this.$emit('deleted', this.data.id);
-
             },
             markBestReply() {
                 axios.post('/replies/'+ this.data.id +'/best');
