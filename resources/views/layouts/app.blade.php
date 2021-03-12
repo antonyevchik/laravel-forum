@@ -34,6 +34,7 @@
         .level {display: flex; align-item: center;}
         .flex {flex: 1}
         .mr-1 { margin-right: 1em;}
+        .ml-a { margin-left: auto;}
         [v-cloak] {display: none;}
     </style>
 
