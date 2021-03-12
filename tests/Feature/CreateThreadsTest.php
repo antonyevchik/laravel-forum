@@ -55,8 +55,6 @@ class CreateThreadsTest extends TestCase
 
         $response=$this->post('/threads',$thread->toArray());
 
-//        dd($response->headers->get('Location'));
-
         $this->get($response->headers->get('Location'))
             ->assertSee($thread->title)
             ->assertSee($thread->body);
@@ -68,7 +66,6 @@ class CreateThreadsTest extends TestCase
     function a_thread_requires_a_title()
     {
         $this->publishThread(['title'=>null])
-//            ->assertStatus(422);
             ->assertSessionHasErrors('title');
     }
 
@@ -78,7 +75,6 @@ class CreateThreadsTest extends TestCase
     function a_thread_requires_a_body()
     {
         $this->publishThread(['body'=>null])
-//            ->assertStatus(422);
             ->assertSessionHasErrors('body');
     }
 
@@ -101,17 +97,25 @@ class CreateThreadsTest extends TestCase
     {
         $this->signIn();
 
-        $thread = create('App\Thread', ['title' => 'Foo Title', 'slug' => 'foo-title']);
+        $thread = create('App\Thread', ['title' => 'Foo Title']);
 
         $this->assertEquals($thread->fresh()->slug, 'foo-title');
 
-        $this->post(route('threads'), $thread->toArray());
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
 
-        $this->assertTrue(Thread::whereSlug('foo-title-2')->exists());
+        $this->assertEquals("foo-title-{$thread['id']}", $thread['slug']);
+    }
 
-        $this->post(route('threads'), $thread->toArray());
+    /** @test */
+    function a_thread_with_a_title_that_ends_in_a_number_should_generate_the_proper_slug()
+    {
+        $this->signIn();
 
-        $this->assertTrue(Thread::whereSlug('foo-title-3')->exists());
+        $thread = create('App\Thread', ['title' => 'Some Title 24']);
+
+        $thread = $this->postJson(route('threads'), $thread->toArray())->json();
+
+        $this->assertEquals("some-title-24-{$thread['id']}", $thread['slug']);
     }
 
     /**
@@ -124,7 +128,6 @@ class CreateThreadsTest extends TestCase
         $this->delete($thread->path())->assertRedirect('/login');
         $this->signIn();
         $this->delete($thread->path())->assertStatus(403);
-
     }
 
     /**
@@ -141,7 +144,6 @@ class CreateThreadsTest extends TestCase
         $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
 
         $this->assertEquals(0, Activity::count());
-
     }
 
     /**
@@ -153,6 +155,5 @@ class CreateThreadsTest extends TestCase
         $this->withExceptionHandling()->signIn();
         $thread = make('App\Thread', $overrides);
         return $this->post(route('threads'), $thread->toArray());
-
     }
 }
