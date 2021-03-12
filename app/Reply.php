@@ -68,7 +68,7 @@ class Reply extends Model
     }
 
     /**
-     *
+     * Determine if the current reply is marked as the best.
      */
     public function isBest()
     {
