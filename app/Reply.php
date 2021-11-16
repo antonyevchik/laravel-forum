@@ -34,7 +34,6 @@ class Reply extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      * @var mixed
      */
-
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');

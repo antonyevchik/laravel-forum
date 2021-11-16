@@ -69,13 +69,26 @@ class Thread extends Model
     /**
      * @param array $reply
      * @return Model
+     * @throws \Exception
      */
-    public function addReply($reply)
+    public function addReply(array $reply)
     {
+        if ($this->locked) {
+            throw new \Exception('Thread is locked');
+        }
+
         $reply = $this->replies()->create($reply);
         event(new ThreadReceivedNewReply($reply));
 
         return $reply;
+    }
+
+    /**
+     * Lock the thread
+     */
+    public function lock()
+    {
+        $this->update(['locked' => true]);
     }
 
     /**
