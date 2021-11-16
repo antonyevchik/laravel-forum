@@ -28,14 +28,18 @@ class RepliesController extends Controller
      * @param integer $channelId
      * @param Thread $thread
      * @param CreatePostRequest $form
-     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Database\Eloquent\Model|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function store($channelId, Thread $thread, CreatePostRequest $form)
     {
-       return $thread->addReply([
-            'body' => request('body'),
-            'user_id' => auth()->id()
-        ])->load('owner');
+        try {
+            return $thread->addReply([
+                'body' => request('body'),
+                'user_id' => auth()->id()
+            ])->load('owner');
+        } catch (\Exception $e) {
+            return response('Locked', 422);
+        }
     }
 
     public function update(Reply $reply)
