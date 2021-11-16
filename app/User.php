@@ -59,17 +59,31 @@ class User extends Authenticatable
         return $this->hasOne(Reply::class)->latest();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function activity()
     {
         return $this->hasMany(Activity::class);
     }
 
+    /**
+     * @return void
+     */
     public function confirm()
     {
         $this->confirmed = true;
         $this->confirmation_token = null;
 
         $this->save();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return in_array($this->name, ['JohnDoe', 'JaneDoe']);
     }
 
     public function read($thread)
