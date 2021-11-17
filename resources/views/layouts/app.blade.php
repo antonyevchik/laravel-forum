@@ -38,7 +38,7 @@
         [v-cloak] {display: none;}
     </style>
 
-    @yield('header')
+    @yield('head')
 </head>
 <body>
     <div id="app">
