@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Activity;
+use App\Channel;
 use App\Thread;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Testing\TestResponse;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -14,7 +16,6 @@ use Tests\TestCase;
 class CreateThreadsTest extends TestCase
 {
     use DatabaseMigrations;
-
 
     /**
      * @test
@@ -35,7 +36,7 @@ class CreateThreadsTest extends TestCase
      */
     function new_users_must_first_confirm_their_email_address_before_creating_threads()
     {
-        $user = factory('App\User')->states('unconfirmed')->create();
+        $user = User::factory()->unconfirmed()->create();
         $this->signIn($user);
 
         $thread = make('App\Thread');
@@ -83,7 +84,7 @@ class CreateThreadsTest extends TestCase
      */
     function a_thread_requires_a_valid_channel()
     {
-        factory('App\Channel',2)->create();
+        Channel::factory(2)->create();
 
         $this->publishThread(['channel_id'=>null])
             ->assertSessionHasErrors('channel_id');

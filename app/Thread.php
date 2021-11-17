@@ -6,12 +6,13 @@ use App\Events\ThreadReceivedNewReply;
 use App\Filters\ThreadFilters;
 use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Thread extends Model
 {
-    use RecordsActivity;
+    use HasFactory, RecordsActivity;
 
 
     protected $guarded = [];

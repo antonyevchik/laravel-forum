@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 //use PHPUnit\Framework\TestCase;
 use App\Notifications\ThreadWasUpdated;
+use App\Thread;
 use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Redis;
@@ -17,7 +18,7 @@ class ThreadTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = Thread::factory()->create();
     }
     /**
      * @test
@@ -44,8 +45,6 @@ class ThreadTest extends TestCase
      */
     function a_thread_has_replies()
     {
-
-
         $this->assertInstanceOf('Illuminate\DataBase\Eloquent\Collection',$this->thread->replies);
     }
 
