@@ -92,7 +92,7 @@ class CreateThreadsTest extends TestCase
     /**
      * @test
      */
-    public function a_thread_requires_recaptcha_verification()
+    function a_thread_requires_recaptcha_verification()
     {
         unset(app()[Recaptcha::class]);
 
