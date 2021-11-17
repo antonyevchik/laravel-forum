@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 use Tests\TestCase;
@@ -29,7 +30,7 @@ class LockThreadsTest extends TestCase
     /** @test */
     public function administrator_can_lock_threads()
     {
-        $this->signIn(factory('App\User')->states('administrator')->create());
+        $this->signIn(User::factory()->administrator()->create());
 
         $thread = create('App\Thread', ['user_id' => auth()->id()]);
 
@@ -41,9 +42,9 @@ class LockThreadsTest extends TestCase
     /** @test */
     public function administrator_can_unlock_threads()
     {
-        $this->signIn(factory('App\User')->states('administrator')->create());
+        $this->signIn(User::factory()->administrator()->create());
 
-        $thread = create('App\Thread', ['user_id' => auth()->id(), 'locked' => false]);
+        $thread = create('App\Thread', ['user_id' => auth()->id(), 'locked' => true]);
 
         $this->delete(route('locked-threads.destroy', $thread));
 
