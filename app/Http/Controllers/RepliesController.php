@@ -11,16 +11,23 @@ use App\User;
 
 class RepliesController extends Controller
 {
+    /**
+     * RepliesController constructor
+     */
     public function __construct()
     {
         $this->middleware('auth', ['except' => 'index']);
     }
 
+    /**
+     * @param $channelId
+     * @param Thread $thread
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function index($channelId, Thread $thread)
     {
         return $thread->replies()->paginate(20);
     }
-
 
     /**
      * Persist a new reply.
@@ -42,15 +49,24 @@ class RepliesController extends Controller
         }
     }
 
+    /**
+     * @param Reply $reply
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
 
-            $this->validate(request(),['body'=>'required|spamfree']);
+        request()->validate(['body'=>'required|spamfree']);
 
             $reply->update(request(['body']));
     }
 
+    /**
+     * @param Reply $reply
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function destroy(Reply $reply)
     {
         $this->authorize('update', $reply);

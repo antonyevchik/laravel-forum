@@ -25,17 +25,17 @@
     <!--  fontawesome icons  -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     <style>
-        body {padding-bottom: 100px;}
-        .level {display: flex; align-item: center;}
-        .flex {flex: 1}
-        .mr-1 { margin-right: 1em;}
-        .ml-a { margin-left: auto;}
-        [v-cloak] {display: none;}
+        body { padding-bottom: 100px; }
+        .level { display: flex; align-items: center;}
+        .level-item { margin-right: 1em; }
+        .flex { flex: 1; }
+        .mr-1 { margin-right: 1em; }
+        .ml-a { margin-left: auto; }
+        [v-cloak] { display: none; }
     </style>
 
     @yield('head')
