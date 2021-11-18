@@ -10,13 +10,13 @@
             return {
                 repliesCount: this.thread.replies_count,
                 locked: this.thread.locked,
+                editing: false,
             }
         },
 
         methods: {
             toggleLock () {
                 axios[this.locked ? 'delete' : 'post']('/locked-threads/'+ this.thread.slug);
-
                 this.locked = ! this.locked;
             }
         },
