@@ -24,7 +24,6 @@ import Paginator from './components/Paginator';
 import UserNotifications from "./components/UserNotifications";
 import AvatarForm from "./components/AvatarForm";
 import Thread from "./pages/Thread";
-import Scan from "./components/Scan";
 import Wysiwyg from "./components/Wysiwyg";
 
 Vue.component('flash', Flash);
@@ -32,7 +31,6 @@ Vue.component('paginator', Paginator);
 Vue.component('user-notifications', UserNotifications);
 Vue.component('avatar-form', AvatarForm);
 Vue.component('thread-view', Thread);
-Vue.component('scan-search', Scan);
 Vue.component('wysiwyg', Wysiwyg);
 
 /**
